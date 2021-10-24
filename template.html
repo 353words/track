@@ -16,7 +16,6 @@
     <div id="track"></div>
     <script>
       var m = L.map('track').setView([{{.start.Lat}}, {{.start.Lng}}], 15);
-      //var m = L.map('track').setView([32.519585,35.015021], 15);
       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={{.access_token}}', {
 		maxZoom: 18,
 		id: 'mapbox/streets-v11',
