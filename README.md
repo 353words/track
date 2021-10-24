@@ -1,4 +1,5 @@
 # Plotting Jogging Track on Map - GIS in Go
+
 +++
 title = "Plotting Jogging Track on Map - GIS in Go"
 date = "FIXME"
