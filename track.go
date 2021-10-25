@@ -79,7 +79,7 @@ func meanRow(t time.Time, rows []Row) Row {
 	}
 }
 
-// resample re-samples rows to freq, using mean to calculate values
+// resample resamples rows to freq, using mean to calculate values
 func resample(rows []Row, freq time.Duration) []Row {
 	buckets := make(map[time.Time][]Row)
 	for _, row := range rows {
