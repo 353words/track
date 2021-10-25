@@ -284,4 +284,4 @@ Listing 10 shows how to run the code. When you'll open the generated `track.html
 
 In about 150 lines of Go and HTML template, we loaded data from CSV, parsed it, resampled, and generated an interactive map. You don't have to use fancy geographic tools (called [GIS](https://en.wikipedia.org/wiki/Geographic_information_system)) to show data on maps, using Go to "glue" CSV and leaflet (which uses [OpenStreetMap](https://www.openstreetmap.org/) under the hood) is fun. I encourage you to leaflet more, it's a wonderful library that has [a lot of capabilities](https://leafletjs.com/examples.html).
 
-
+You can view the source code to this blog post [on github](https://github.com/353words/track).
