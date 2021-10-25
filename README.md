@@ -26,6 +26,9 @@ time,lat,lng,height
 
 Listing one shows the start of `track.csv`. Each line contains a time stamp in [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time), [latitude](https://en.wikipedia.org/wiki/Latitude), [longitude](https://en.wikipedia.org/wiki/Longitude) and height above sea level.
 
+
+_Note:I'm not running at 3am, the times are in UTC and I live in Israel which is two hours ahead. It's early, but not *that* early._
+
 `track.csv` contains 740 rows of data, which is too much to show on a map. The plan is to load the data, then [resample](https://en.wikipedia.org/wiki/Sample-rate_conversion) the data to get fewer points to show and finally show the data on a map by generate HTML that uses [leaflet](https://leafletjs.com/).
 
 Let's start!
@@ -112,6 +115,41 @@ Listing 4 show the `loadData` function that loads data from the CSV. `loadData` 
 ```
 
 Listing 5 shows `meanRow` that takes a slice of `Row` and returns a mean row `Row`. On line 66 we initialize the means to 0, and on lines 67 to 70 we sum the fields. On lines 74 to 79 we return the mean rows with the time and mean value for each field.
+
+Before we take a look at the `resample` function, let's understand what it does. Re-sampling is like a [GROUP BY](https://en.wikipedia.org/wiki/Group_by_(SQL)) statement - we split the data in groups (called `buckets` in the code below) according to some criteria. In our case, we split the data to groups that fall withing a specific time range. Once we grouped the data, for each group we return the group (the time) and a representing row. In the code below we calculate the [mean](https://en.wikipedia.org/wiki/Mean) (sometimes called "average") of each Row field.
+
+Here's an example, say we have the following made up data:
+
+```
+time,lat,lng,height
+2015-08-20 03:48:07,32.0,42.0,10.0
+2015-08-20 03:48:28,33.0,43.0,11.0
+2015-08-20 03:48:52,34.0,44.0,12.0
+2015-08-20 03:49:09,35.0,45.0,13.0
+2015-08-20 03:49:37,36.0,46.0,14.0
+```
+
+When we re-sample to minute frequency, we first group the rows:
+
+```
+time: 2015-08-20 03:48
+2015-08-20 03:48:07,32.0,42.0,10.0
+2015-08-20 03:48:28,33.0,43.0,11.0
+2015-08-20 03:48:52,34.0,44.0,12.0
+
+time: 2015-08-20 03:49
+2015-08-20 03:49:09,35.0,45.0,13.0
+2015-08-20 03:49:37,36.0,46.0,14.0
+```
+
+Finally, for each group, we return the group (time) average of each field:
+
+```
+2015-08-20 03:48,33.0,43.0,11.0
+2015-08-20 03:49,35.5,45.5,13.5
+```
+
+Back to the code ...
 
 **Listing 6: Re-sampling**
 
@@ -244,4 +282,4 @@ Listing 10 shows how to run the code. When you'll open the generated `track.html
 
 ### Conclusion
 
-With about 100 lines of Go code and 30 lines of HTML template, we loaded data from CSV, parsed and re-sampled it and generated an interactive map. You don't have to use fancy GIS tools to show data on maps, using Go to "glue" CSV and leaflet (which uses [OpenStreetMap](https://www.openstreetmap.org/) under the hood) is fun. I encourage you to leaflet more, it's a wonderful library that has [a lot of capabilities](https://leafletjs.com/examples.html).
+In about 150 lines of Go and HTML template, we loaded data from CSV, parsed it, re-sampled, and generated an interactive map. You don't have to use fancy geographic tools (called [GIS](https://en.wikipedia.org/wiki/Geographic_information_system)) to show data on maps, using Go to "glue" CSV and leaflet (which uses [OpenStreetMap](https://www.openstreetmap.org/) under the hood) is fun. I encourage you to leaflet more, it's a wonderful library that has [a lot of capabilities](https://leafletjs.com/examples.html).
